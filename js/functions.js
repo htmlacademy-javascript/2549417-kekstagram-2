@@ -1,67 +1,30 @@
-// функция проверки длины строки
-const checkedLineLength = (line = '', maxLength = 1) => line.length <= maxLength;
+const isMeetingInWorkHours = function (
+  workStart,
+  workEnd,
+  meetingStart,
+  meetingDuration
+) {
+  // Преобразуем время в минуты с начала дня
+  const timeToMinutes = (time) => {
+    const [hours, minutes] = time.split(':').map(Number); // разделяем часы и минуты
+    return hours * 60 + minutes; // возвращаем количество минут
+  };
 
+  // Преобразуем входные данные в минуты
+  const workStartMinutes = timeToMinutes(workStart); // начало рабочего дня (минуты)
+  const workEndMinutes = timeToMinutes(workEnd); // конец рабочего дня (минуты)
+  const meetingStartMinutes = timeToMinutes(meetingStart); // начало встречи (минуты)
+  const meetingEndMinutes = meetingStartMinutes + meetingDuration; // конец встречи (минуты)
 
-//функция проверки на палидромность
-const checkedPalidrom = function (line = '') {
-  line = line.toString().toLowerCase().replace(/[^а-яa-z0-9]/g, '');
-  const newLine = line.split('').reverse().join('');
-  return newLine === line;
+  // Проверяем, выходит ли встреча за рамки рабочего дня
+  return (
+    meetingStartMinutes >= workStartMinutes && // проверяем не начинается ли встреча до начала рабочего дня
+    meetingEndMinutes <= workEndMinutes // проверяем не заканчивается ли встреча после окончания рабочего дня
+  );
 };
 
-
-// извлечение цифр из строки
-function extractNumbersFromTheLine(line = '') {
-  const lineToString = line.toString().replace(/[^0-9]/g, '');
-  return lineToString === '' ? NaN : parseInt(lineToString, 10);
-}
-
-checkedLineLength('проверяемая строка', 20); // строка короче 20 символов - true
-checkedLineLength('проверяемая строка', 18); // строка равна 18 символам - true
-checkedLineLength('проверяемая строка', 10); // строка длинее 10 симолов - false
-
-
-checkedPalidrom('топот'); // Строка является палиндромом - true
-checkedPalidrom('ДовОд'); // Несмотря на разный регистр, тоже палиндром - true
-checkedPalidrom('Кекс'); // Это не палиндром - false
-checkedPalidrom('Лёша на полке клопа нашёл '); // Это палиндром - true
-
-
-extractNumbersFromTheLine('2023 год'); // 2023
-extractNumbersFromTheLine('ECMAScript 2022'); //2022
-extractNumbersFromTheLine('1 кефир, 0.5 батона'); // 105
-extractNumbersFromTheLine('агент 007'); // 7
-extractNumbersFromTheLine('а я томат'); // NaN
-
-
-extractNumbersFromTheLine(2023); // 2023
-extractNumbersFromTheLine(-1); // 1
-extractNumbersFromTheLine(1.5); // 15
-
-
-// console.log('Проверка строки на максимальную длину');
-// console.log(checkedLineLength('проверяемая строка', 20)); // строка короче 20 символов
-// console.log(checkedLineLength('проверяемая строка', 18)); // строка равна 18 символам
-// console.log(checkedLineLength('проверяемая строка', 10)); // строка длинее 10 симолов
-
-
-// console.log('\nпроверка на палидромность');
-// console.log(checkedPalidrom('топот')); // Строка является палиндромом
-// console.log(checkedPalidrom('ДовОд')); // Несмотря на разный регистр, тоже палиндром
-// console.log(checkedPalidrom('Кекс')); // Это не палиндром
-// console.log(checkedPalidrom('Лёша на полке клопа нашёл ')); // Это палиндром
-
-
-// console.log('\nИзвлечение цифр из строки (>0): Строки');
-// console.log(extractNumbersFromTheLine('2023 год'));
-// console.log(extractNumbersFromTheLine('ECMAScript 2022'));
-// console.log(extractNumbersFromTheLine('1 кефир, 0.5 батона'));
-// console.log(extractNumbersFromTheLine('агент 007'));
-// console.log(extractNumbersFromTheLine('а я томат'));
-
-
-// console.log('\nИзвлечение цифр из строки (>0): Числа');
-// console.log(extractNumbersFromTheLine(2023));
-// console.log(extractNumbersFromTheLine(-1));
-// console.log(extractNumbersFromTheLine(1.5));
-
+// Примеры использования
+console.log(isMeetingInWorkHours('9:00', '17:9', '10:00', 60)); // true
+console.log(isMeetingInWorkHours('09:00', '17:00', '16:00', 120)); // false
+console.log(isMeetingInWorkHours('8:00', '18:00', '07:30', 30)); // false
+console.log(isMeetingInWorkHours('12:30', '14:30', '13:00', 30)); // true
