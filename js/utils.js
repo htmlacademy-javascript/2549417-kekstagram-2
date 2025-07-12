@@ -8,7 +8,9 @@ import {
   MIN_INDEX_LIKE,
   MAX_INDEX_LIKE,
   MIN_INDEX_COMMENT,
-  MAX_INDEX_COMMENT} from './settings.js';
+  MAX_INDEX_COMMENT,
+  COUNT_OBJECTS} from './settings.js';
+
 
 import {
   generationUniqueRandomIndex,
@@ -50,4 +52,6 @@ const createPhoto = () => {
   };
 };
 
-export { createPhoto };
+const photos = () => Array.from({ length: COUNT_OBJECTS }, createPhoto());
+
+export { photos };
