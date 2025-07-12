@@ -11,6 +11,7 @@ import {
   MAX_INDEX_COMMENT,
   COUNT_OBJECTS} from './settings.js';
 
+
 import {
   generationUniqueRandomIndex,
   getRandomMessage,
