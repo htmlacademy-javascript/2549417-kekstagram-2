@@ -27,6 +27,7 @@ const clearComments = (node) => {
   }
 };
 
+
 // формируем комментарий
 const createComment = () => {
   let id = 0;
