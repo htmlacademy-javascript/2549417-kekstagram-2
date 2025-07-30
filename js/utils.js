@@ -11,12 +11,21 @@ import {
   MAX_INDEX_COMMENT,
   COUNT_OBJECTS} from './settings.js';
 
-
 import {
   generationUniqueRandomIndex,
   getRandomMessage,
   getRandomName,
 } from './random.js';
+
+// определение нажатой кнопки Esc
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+// очищает комментарии
+const clearComments = (node) => {
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
+  }
+};
 
 
 // формируем комментарий
@@ -54,4 +63,4 @@ const createPhoto = () => {
 
 const photos = () => Array.from({ length: COUNT_OBJECTS }, createPhoto());
 
-export { photos };
+export { photos, isEscapeKey, clearComments };

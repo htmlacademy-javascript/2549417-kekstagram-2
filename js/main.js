@@ -1,8 +1,5 @@
-// import { COUNT_OBJECTS } from './settings.js';
-// import { createPhoto } from './utils.js';
-
-// console.log(Array.from({ length: COUNT_OBJECTS }, createPhoto()));
-
 import { miniaturesView } from './miniatures';
+import { initDelegatedEvents } from './fullphoto.js';
 
-miniaturesView();
+miniaturesView(); // создание миниатюр
+initDelegatedEvents(); // открытие полноразмерного изображения
