@@ -1,6 +1,5 @@
 import { photos } from './utils.js';
 
-
 const fragmentPictureTemplate = document.createDocumentFragment();
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const pictures = document.querySelector('.pictures');
