@@ -23,4 +23,6 @@ const miniaturesView = () => {
   return pictures;
 };
 
+miniaturesView();
+
 export { miniaturesView, arrayPhotoTestData };

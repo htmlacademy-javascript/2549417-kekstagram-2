@@ -62,6 +62,7 @@ const loadCommentBatch = (index) => {
   }
 };
 
+
 // Обработчик загрузки следующей партии комментариев
 const onLoadMoreComments = () => {
   clearComments(listComments);
@@ -75,15 +76,16 @@ const closeFullImageForm = () => {
 
   // Убираем обработчик загрузки комментариев
   commentsLoaderButton.removeEventListener('click', onLoadMoreComments);
+  document.removeEventListener('keydown', onDocumentKeydown);
 };
 
 // Обработчик нажатия Esc
-const onDocumentKeydown = (evt) => {
+function onDocumentKeydown (evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeFullImageForm();
   }
-};
+}
 
 // Загружает большое изображение и его метаданные
 const loaderFullPhoto = ({ url, likes, comments, description }) => {
@@ -126,6 +128,6 @@ const initDelegatedEvents = () => {
   picturesContainer.addEventListener('click', onDelegateThumbnailClick);
 };
 
-// initDelegatedEvents();
+initDelegatedEvents();
 
 export { initDelegatedEvents };
