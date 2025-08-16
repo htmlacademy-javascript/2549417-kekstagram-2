@@ -5,15 +5,14 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 const pictures = document.querySelector('.pictures');
 
 const arrayPhotoTestData = photos();
-// console.log(arrayPhotoTestData);
-
 
 const miniaturesView = () => {
-  arrayPhotoTestData.forEach(({id, url, description, comments, likes}) => {
+  arrayPhotoTestData.forEach(({ id, url, description, comments, likes }) => {
     const clonePictureTemplate = pictureTemplate.cloneNode(true);
     clonePictureTemplate.querySelector('.picture__img').src = url;
     clonePictureTemplate.querySelector('.picture__img').alt = description;
-    clonePictureTemplate.querySelector('.picture__comments').textContent = comments.length;
+    clonePictureTemplate.querySelector('.picture__comments').textContent =
+      comments.length;
     clonePictureTemplate.querySelector('.picture__likes').textContent = likes;
     clonePictureTemplate.dataset.id = id;
     fragmentPictureTemplate.append(clonePictureTemplate);
@@ -23,6 +22,5 @@ const miniaturesView = () => {
   return pictures;
 };
 
-miniaturesView();
-
 export { miniaturesView, arrayPhotoTestData };
+// export { miniaturesView };
