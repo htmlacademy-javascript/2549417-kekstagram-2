@@ -1,65 +1,59 @@
-import {
-  MESSAGES,
-  NAMES } from './data.js';
+/*
+  #############################################################
+  ##########         ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ         ##########
+  #############################################################
+*/
 
-import {
-  MIN_INDEX_AVATAR,
-  MAX_INDEX_AVATAR,
-  MIN_INDEX_LIKE,
-  MAX_INDEX_LIKE,
-  MIN_INDEX_COMMENT,
-  MAX_INDEX_COMMENT,
-  COUNT_OBJECTS} from './settings.js';
-
-import {
-  generationUniqueRandomIndex,
-  getRandomMessage,
-  getRandomName,
-} from './random.js';
-
-// определение нажатой кнопки Esc
-const isEscapeKey = (evt) => evt.key === 'Escape';
+const isEscapeKey = (evt) => evt.key === 'Escape'; // определение нажатой кнопки Esc
 
 // очищает комментарии
 const clearComments = (node) => {
-  while (node.firstChild) {
-    node.removeChild(node.firstChild);
+  while (node.firstChild) { // если у ноды есть ребенок
+    node.removeChild(node.firstChild); // мы его удаляем
   }
 };
 
-// формируем комментарий
-const createComment = () => {
-  let id = 0;
+// Удаляем все элементы с указанным параметром
+const clearNodes = (node) => {
+  const removed = document.querySelectorAll(node); // находим все указанные элементы
+  removed.forEach((remove) => { // промегаемся по каждому из них
+    remove.remove(); // удаляем
+  });
+};
 
-  return () => {
-    const comment = {
-      id: ++id,
-      avatar: `img/avatar-${generationUniqueRandomIndex(MIN_INDEX_AVATAR, MAX_INDEX_AVATAR)}.svg`,
-      message: getRandomMessage(MESSAGES),
-      name: getRandomName(NAMES),
-    };
-
-    return comment;
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
 };
 
-// формируем описание добавленного изображения
-const createPhoto = () => {
-  let id = 0;
+function throttle (callback, delayBetweenFrames) {
+  // Используем замыкания, чтобы время "последнего кадра" навсегда приклеилось
+  // к возвращаемой функции с условием, тогда мы его сможем перезаписывать
+  let lastTime = 0;
 
-  return () => {
-    const photo = {
-      'id': ++id,
-      'url': `photos/${id}.jpg`,
-      'description': `Описание фотографии № ${id}`,
-      'likes': generationUniqueRandomIndex(MIN_INDEX_LIKE, MAX_INDEX_LIKE),
-      'comments': Array.from({ length: generationUniqueRandomIndex(MIN_INDEX_COMMENT, MAX_INDEX_COMMENT) }, createComment()),
-    };
+  return (...rest) => {
+    // Получаем текущую дату в миллисекундах,
+    // чтобы можно было в дальнейшем
+    // вычислять разницу между кадрами
+    const now = new Date();
 
-    return photo;
+    // Если время между кадрами больше задержки,
+    // вызываем наш колбэк и перезаписываем lastTime
+    // временем "последнего кадра"
+    if (now - lastTime >= delayBetweenFrames) {
+      callback.apply(this, rest);
+      lastTime = now;
+    }
   };
-};
+}
 
-const photos = () => Array.from({ length: COUNT_OBJECTS }, createPhoto());
+/*
+  #############################################################
+  ##########                 ЭКСПОРТ                 ##########
+  #############################################################
+*/
 
-export { photos, isEscapeKey, clearComments };
+export { isEscapeKey, clearComments, clearNodes, debounce, throttle };

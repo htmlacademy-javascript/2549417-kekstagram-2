@@ -1,132 +1,160 @@
-import { arrayPhotoTestData } from './miniatures.js';
+
+import { arrayPhotoData } from './miniatures.js';
 import { isEscapeKey, clearComments } from './utils.js';
 import { COMMENTS_PER_LOAD } from './settings.js';
 
-// import {j} from './test_full_project.js';
 
 const body = document.querySelector('body');
 const fullImageForm = document.querySelector('.big-picture');
-const fullImageFormClose = document.querySelector('.big-picture__cancel');
 const fullPhoto = document.querySelector('.big-picture__img img');
 const imageCaption = document.querySelector('.social__caption');
 const likesCount = document.querySelector('.likes-count');
-const commentShownCount = document.querySelector(
-  '.social__comment-shown-count'
-);
-const commentTotalCount = document.querySelector(
-  '.social__comment-total-count'
-);
+const commentShownCount = document.querySelector('.social__comment-shown-count');
+const commentTotalCount = document.querySelector('.social__comment-total-count');
 const listComments = document.querySelector('.social__comments');
 const itemComment = document.querySelector('.social__comment');
 const commentsLoaderButton = document.querySelector('.comments-loader');
+const picturesContainer = document.querySelector('.pictures'); // Контейнер для миниатюр
+const fullImageFormClose = document.querySelector('.big-picture__cancel');
 
 const fragmentItemComment = document.createDocumentFragment(); // Конструктор фрагмента для комментариев
 
-// Треки текущего состояния
-let currentIndex = null;
-let loadedComments = 0;
+/*
+  #################################################################################
+  ##########   ЛОКАЛЬНЫЕ УСТАНОВКИ  (переменные, константы, параметры)   ##########
+  #################################################################################
+*/
 
-// Контейнер для миниатюр
-const picturesContainer = document.querySelector('.pictures');
+let currentIndex = null; // текущий индекс
+let loadedComments = 0; // количество загруженных комментариев
+
+/*
+  #################################################################################
+  ##########              УПРАВЛЕНИЕ ЗАГРУЗКОЙ КОММЕНТАРИЕВ              ##########
+  #################################################################################
+*/
 
 // Загрузчик порций комментариев
-const loadCommentBatch = (index) => {
-  const commentsArray = arrayPhotoTestData[index].comments;
+const getLoadCommentBatch = (index) => {
+  const commentsArray = arrayPhotoData[index].comments; //получаем комментарии выбранного изображения
 
-  if (loadedComments >= commentsArray.length) {
-    commentsLoaderButton.classList.add('hidden');
-    return;
+  if (loadedComments >= commentsArray.length) { // если загруженных комментариеы больше или равно имеющимся
+    commentsLoaderButton.classList.add('hidden'); // скрываем "кнопку" загрузки очередной партии
+    return; // завершаем работу
   }
 
-  const start = loadedComments;
-  const end = Math.min(start + COMMENTS_PER_LOAD, commentsArray.length);
+  const start = loadedComments; // начальное значение комментариев
+  const end = Math.min(start + COMMENTS_PER_LOAD, commentsArray.length); // конечное значение комментариев
 
-  commentsArray.slice(start, end).forEach(({ avatar, name, message }) => {
-    const cloneItemComment = itemComment.cloneNode(true);
-    cloneItemComment.querySelector('.social__picture').src = avatar;
-    cloneItemComment.querySelector('.social__picture').alt = name;
-    cloneItemComment.querySelector('.social__text').textContent = message;
-    fragmentItemComment.append(cloneItemComment);
+  commentsArray.slice(start, end).forEach(({ avatar, name, message }) => { // отрезаем кусок от всех комментариев изображения и проходимся циклов деструктурируя их
+    const cloneItemComment = itemComment.cloneNode(true); // клонируем шаблон для вставки комментария
+    cloneItemComment.querySelector('.social__picture').src = avatar; // указываем аватарку
+    cloneItemComment.querySelector('.social__picture').alt = name; // указываем имя
+    cloneItemComment.querySelector('.social__text').textContent = message; // вставляем сообщение
+    fragmentItemComment.append(cloneItemComment); // добавляем сформированный комментарий во фрагмент
   });
 
-  listComments.append(fragmentItemComment);
+  listComments.append(fragmentItemComment); // добавляем фрагмент на страницу
 
-  loadedComments += end - start;
-  commentShownCount.textContent = loadedComments;
+  loadedComments += end - start; // увеличиваем кол-во загруженных комментариев
+  commentShownCount.textContent = loadedComments; // меняем счетчик загруженных комментариев
 
-  if (loadedComments >= commentsArray.length) {
-    commentsLoaderButton.classList.add('hidden');
+  if (loadedComments >= commentsArray.length) { // если загруженных комментариеы больше или равно имеющимся
+    commentsLoaderButton.classList.add('hidden'); // скрываем "кнопку" загрузки очередной партии
   } else {
-    commentsLoaderButton.classList.remove('hidden');
+    commentsLoaderButton.classList.remove('hidden'); // иначе показываем "кнопку" загрузки очередной партии
   }
 };
-
 
 // Обработчик загрузки следующей партии комментариев
 const onLoadMoreComments = () => {
-  clearComments(listComments);
-  loadCommentBatch(currentIndex);
+  // clearComments(listComments); // очищаем загруженные комментарии (для вывода порции по 5 штук)
+  getLoadCommentBatch(currentIndex); // загружаем следующие
 };
 
+/*
+  #################################################################################
+  ##########         ЗАКРЫВАЕМ ОКНО ПОЛНОРАЗМЕРНОГО ИЗОБРАЖЕНИЯ          ##########
+  #################################################################################
+*/
+
 // Функция закрытия увеличенного изображения
-const closeFullImageForm = () => {
-  fullImageForm.classList.add('hidden');
-  body.classList.remove('modal-open');
+const getCloseFullImageForm = () => {
+  fullImageForm.classList.add('hidden'); // скрываем окно изображения
+  body.classList.remove('modal-open'); // "размораживаем" основное окно
+
+  fullPhoto.src = ''; // убираем изображение
+  likesCount.textContent = 0; // убираем количество лайков
+  imageCaption.textContent = ''; // убираем описание изображения
+  commentShownCount.textContent = 0; // обнуляем счетчик кол-ва показанных комментариев
+  commentTotalCount.textContent = 0; // обнуляем общее кол-во комментариев
+  commentsLoaderButton.classList.add('hidden'); // скрываем кнопку загрузки комментариев
 
   // Убираем обработчик загрузки комментариев
-  commentsLoaderButton.removeEventListener('click', onLoadMoreComments);
-  document.removeEventListener('keydown', onDocumentKeydown);
+  commentsLoaderButton.removeEventListener('click', onLoadMoreComments); // убираем обработчик загрузчи следующих комментариев
+  document.removeEventListener('keydown', onDocumentKeydown); // убираем обработчик закрытия формы по ESC
 };
 
 // Обработчик нажатия Esc
 function onDocumentKeydown (evt) {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeFullImageForm();
+  if (isEscapeKey(evt)) { // если нажата клавиша ESC
+    evt.preventDefault(); // отменяем действие по умолчанию
+    getCloseFullImageForm(); // закрываем форму полноразмерного просмотра изображения
   }
 }
 
-// Загружает большое изображение и его метаданные
-const loaderFullPhoto = ({ url, likes, comments, description }) => {
-  fullPhoto.src = url;
-  likesCount.textContent = likes;
-  commentTotalCount.textContent = comments.length;
-  imageCaption.textContent = description;
-  commentShownCount.textContent = 0;
+/*
+  #################################################################################
+  ##########         ОТКРЫВАЕМ ОКНО ПОЛНОРАЗМЕРНОГО ИЗОБРАЖЕНИЯ          ##########
+  #################################################################################
+*/
 
-  commentsLoaderButton.addEventListener('click', onLoadMoreComments);
+// Загружает большое изображение и его метаданные
+const getLoadFullPhoto = ({ url, likes, comments, description }) => {
+  fullPhoto.src = url; // указываем место расположения изображения
+  likesCount.textContent = likes; // указываем кол-во лайков
+  commentTotalCount.textContent = comments.length; // указываем кол-во комментариев
+  imageCaption.textContent = description; // указываем описание изображения
+  commentShownCount.textContent = 0; // обнуляем счетчик кол-ва показанных комментариев
+
+  commentsLoaderButton.addEventListener('click', onLoadMoreComments); // добавляем обработчик следующих комментариев
 };
 
 // Основная функция для открытия увеличенного изображения
-const openFullImageForm = (index) => {
-  fullImageForm.classList.remove('hidden');
-  body.classList.add('modal-open');
-  currentIndex = index;
-  loadedComments = 0;
+const getOpenFullImageForm = (index) => {
+  fullImageForm.classList.remove('hidden'); // показываем окно полноразмерного просмотра изображения
+  body.classList.add('modal-open'); // "замораживаем" основное окно
+  currentIndex = index; // текущий индекс
+  loadedComments = 0; // загруженные комментарии
 
-  clearComments(listComments);
-  loaderFullPhoto(arrayPhotoTestData[index]);
-  loadCommentBatch(index);
+  clearComments(listComments); // очищаем загруженные комментарии
+  getLoadFullPhoto(arrayPhotoData[index]); // заполняем данными выбранного изображения
+  getLoadCommentBatch(index); // загружаем первую порцию комментариев
 
-  fullImageFormClose.addEventListener('click', closeFullImageForm);
-  document.addEventListener('keydown', onDocumentKeydown);
+  fullImageFormClose.addEventListener('click', getCloseFullImageForm); // добавляем обработчик закрытия окна по кнопке
+  document.addEventListener('keydown', onDocumentKeydown); // добавляем обработчик закрытия окна по ESC
 };
+
+/*
+  #################################################################################
+  ##########                       ДЕЛЕГИРОВАНИЕ                         ##########
+  #################################################################################
+*/
+
 
 // Главный обработчик событий для миниатюр
 const onDelegateThumbnailClick = (event) => {
   const target = event.target.closest('.picture'); // Проверяем ближайший родитель ".picture"
 
-  if (target) {
-    const id = Number(target.dataset.id) - 1;
-    openFullImageForm(id, target);
+  if (target) { // если родитель найден
+    const id = Number(target.dataset.id); // получаем его ID
+    getOpenFullImageForm(id, target); // открываем окно с данными выбранного изображения
   }
 };
 
 // Основной запуск делегатора
 const initDelegatedEvents = () => {
-  picturesContainer.addEventListener('click', onDelegateThumbnailClick);
+  picturesContainer.addEventListener('click', onDelegateThumbnailClick); // вышаем обработчик на контейнер изображений
 };
 
-initDelegatedEvents();
-
-export { initDelegatedEvents };
+initDelegatedEvents(); // запускаем
