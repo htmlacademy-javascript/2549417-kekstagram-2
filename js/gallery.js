@@ -158,4 +158,3 @@ const initDelegatedEvents = () => {
 };
 
 initDelegatedEvents(); // запускаем
-
