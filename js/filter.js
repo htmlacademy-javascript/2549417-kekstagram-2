@@ -58,14 +58,6 @@ const setupFilters = () => {
   filter.classList.remove('img-filters--inactive'); // показываем блок фильтров
   defaultFilter.disabled = true; // деактивируем кнопку
 
-  // defaultFilter.addEventListener('click', () => applyFilter('default')); // вешает обработчик фильтра "По умолчанию"
-  // randomFilter.addEventListener('click', () => applyFilter('random')); // вешает обработчик фильтра "Случайные"
-  // discussedFilter.addEventListener('click', () => applyFilter('discussed')); // вешает обработчик фильтра "Ожидаемые"
-
-  // defaultFilter.addEventListener('click', debounce(() => applyFilter('default'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "По умолчанию"
-  // randomFilter.addEventListener('click', debounce(() => applyFilter('random'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "Случайные"
-  // discussedFilter.addEventListener('click', debounce(() => applyFilter('discussed'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "Ожидаемые
-
   defaultFilter.addEventListener('click', throttle(() => applyFilter('default'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "По умолчанию"
   randomFilter.addEventListener('click', throttle(() => applyFilter('random'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "Случайные"
   discussedFilter.addEventListener('click', throttle(() => applyFilter('discussed'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "Ожидаемые

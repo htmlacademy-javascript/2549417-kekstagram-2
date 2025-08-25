@@ -35,7 +35,6 @@ const pictures = document.querySelector('.pictures');
   #################################################################################
 */
 
-// let currentScale = 1.0; // значение по умолчанию для масштабирования
 scaleInput.value = '100%'; // начальное значение в поле масштаба
 
 /*
@@ -125,14 +124,6 @@ formImage.addEventListener('submit', (evt) => {
 
 // Закрытие окна
 function closeModalFormImg () {
-  formImgUpload.classList.add('hidden'); // скрываем форму
-  body.classList.remove('modal-open'); // "разблокировываем" страницу
-
-  closeImgUpload.removeEventListener('click', closeModalFormImg); // удаялем обработчик закрытия окна
-  document.removeEventListener('keydown', onDocumentKeydown); // удаляем обработчик закрытия окна по Esc
-  removeEventZoomImgButton(); // удаляем обработчик кнопок масштаба
-  removeEventEffects(); // удаляем обработчики кнопок эффектов
-
   inputImgUpload.value = ''; // очищаем поле выбора изображения
   inputTextHashtags.value = ''; // очищаем поле хэштега
   textDescription.value = ''; // очищаем поле описания
@@ -143,10 +134,13 @@ function closeModalFormImg () {
   scaleInput.value = '100%'; // начальное значение в поле масштаба
   resetScale(); // устанавливаем масштаб по умолчанию
 
-  const errorHashtag = document.querySelector('.img-upload__field-wrapper--error'); // ищем сообщение об ошибке
-  if (errorHashtag) { // если ообщение об ошибке найдено
-    errorHashtag.remove(); // удаляем его
-  }
+  formImgUpload.classList.add('hidden'); // скрываем форму
+  body.classList.remove('modal-open'); // "разблокировываем" страницу
+
+  closeImgUpload.removeEventListener('click', closeModalFormImg); // удаялем обработчик закрытия окна
+  document.removeEventListener('keydown', onDocumentKeydown); // удаляем обработчик закрытия окна по Esc
+  removeEventZoomImgButton(); // удаляем обработчик кнопок масштаба
+  removeEventEffects(); // удаляем обработчики кнопок эффектов
 }
 
 // Закрытие формы при нажатии на Esc

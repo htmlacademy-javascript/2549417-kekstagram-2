@@ -1,4 +1,3 @@
-
 import { arrayPhotoData } from './miniatures.js';
 import { isEscapeKey, clearComments } from './utils.js';
 import { COMMENTS_PER_LOAD } from './settings.js';
@@ -84,6 +83,7 @@ const getCloseFullImageForm = () => {
   body.classList.remove('modal-open'); // "размораживаем" основное окно
 
   fullPhoto.src = ''; // убираем изображение
+  fullPhoto.style = ''; // очищаем примененные стили
   likesCount.textContent = 0; // убираем количество лайков
   imageCaption.textContent = ''; // убираем описание изображения
   commentShownCount.textContent = 0; // обнуляем счетчик кол-ва показанных комментариев
@@ -112,10 +112,28 @@ function onDocumentKeydown (evt) {
 // Загружает большое изображение и его метаданные
 const getLoadFullPhoto = ({ url, likes, comments, description }) => {
   fullPhoto.src = url; // указываем место расположения изображения
+  fullPhoto.alt = 'Изображение';
   likesCount.textContent = likes; // указываем кол-во лайков
   commentTotalCount.textContent = comments.length; // указываем кол-во комментариев
   imageCaption.textContent = description; // указываем описание изображения
   commentShownCount.textContent = 0; // обнуляем счетчик кол-ва показанных комментариев
+
+  commentsLoaderButton.addEventListener('click', onLoadMoreComments); // добавляем обработчик следующих комментариев
+};
+
+// Загружает большое изображение самостоятельно добавленное на сайт
+const getLoadFullPhotoSelfAdded = (url, filter) => {
+  fullPhoto.src = url; // указываем место расположения изображения
+  fullPhoto.alt = 'Изображение';
+  fullPhoto.style.filter = filter; // применяем фильтер
+
+  likesCount.textContent = 0; // обнуляем  кол-во лайков
+  commentTotalCount.textContent = 0; // обнуляем кол-во комментариев
+  imageCaption.textContent = ''; // сбрасываем описание изображения
+  commentShownCount.textContent = 0; // обнуляем счетчик кол-ва показанных комментариев
+
+  clearComments(listComments); // очищаем загруженные комментарии
+  commentsLoaderButton.classList.add('hidden'); // скрываем "кнопку" загрузки очередной партии
 
   commentsLoaderButton.addEventListener('click', onLoadMoreComments); // добавляем обработчик следующих комментариев
 };
@@ -141,14 +159,30 @@ const getOpenFullImageForm = (index) => {
   #################################################################################
 */
 
-
 // Главный обработчик событий для миниатюр
 const onDelegateThumbnailClick = (event) => {
   const target = event.target.closest('.picture'); // Проверяем ближайший родитель ".picture"
 
-  if (target) { // если родитель найден
+  if (target) {
+    // если родитель найден
     const id = Number(target.dataset.id); // получаем его ID
-    getOpenFullImageForm(id, target); // открываем окно с данными выбранного изображения
+
+    if (!id) {
+      // если id отсутствует
+      const src = document.activeElement.querySelector('.picture__img').src; // получаем путь до изображения
+      const filter = document.activeElement.querySelector('.picture__img').style.filter; // получаем данные о примененом эффекте
+
+      getLoadFullPhotoSelfAdded(src, filter); // готовим форму и загружаем изображение
+
+      fullImageForm.classList.remove('hidden'); // показываем окно полноразмерного просмотра изображения
+      body.classList.add('modal-open'); // "замораживаем" основное окно
+
+      fullImageFormClose.addEventListener('click', getCloseFullImageForm); // добавляем обработчик закрытия окна по кнопке
+      document.addEventListener('keydown', onDocumentKeydown); // добавляем обработчик закрытия окна по ESC
+    } else {
+      // если id найден
+      getOpenFullImageForm(id, target); // открываем окно с данными выбранного изображения
+    }
   }
 };
 
