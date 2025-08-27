@@ -4,6 +4,7 @@ import {
   MAX_LENGTH_DESCRIPTION,
 } from './settings.js';
 
+const HASHTAGREGEX = /^#[a-zа-яё0-9]{1,19}$/i; // шаблон хэштега
 let messageError = ''; // ошибка при валидации хэштега
 
 /*
@@ -14,7 +15,6 @@ let messageError = ''; // ошибка при валидации хэштега
 
 // Проверка хэштегов
 const getValidateHashtags = (value) => {
-  const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i; // шаблон хэштега
   const hashtagsString = value.trim(); // чистим строку от пробелов
   const hashtags = hashtagsString.split(/\s+/).filter(Boolean); // разбиваем на отдельные хэштеги, пропускаем пустые
 
@@ -25,7 +25,7 @@ const getValidateHashtags = (value) => {
       return false;
     }
 
-    if (!hashtagRegex.test(tag)) {
+    if (!HASHTAGREGEX.test(tag)) {
       // проверяем каждый хэштег на соответствие шаблону
       messageError = 'tag'; // записываем ошибку, найден некорректный хэштег
       return false; // валидация не пройдена

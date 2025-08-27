@@ -1,5 +1,5 @@
 import { arrayPhotoData, viewMiniatures} from './miniatures';
-import { clearNodes, throttle } from './utils.js';
+import { clearNodes, throttle, debounce } from './utils.js';
 import { TIMEOUT_REDRAW } from './settings.js';
 
 const defaultFilter = document.querySelector('#filter-default');
@@ -47,10 +47,7 @@ const applyFilter = (filterType) => {
       break; // выходим
   }
 
-  setTimeout(() => { // таймер перерисовки изображений
-    viewMiniatures(filteredImages); // перерисовка изображений
-  }, TIMEOUT_REDRAW); // интервал перерисовки
-
+  debounce(viewMiniatures(filteredImages), TIMEOUT_REDRAW);
 };
 
 // Инициализация фильтров

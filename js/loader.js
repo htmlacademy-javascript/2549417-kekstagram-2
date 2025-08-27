@@ -27,6 +27,7 @@ const textDescription = formImage.querySelector('.text__description'); // пол
 const closeImgUpload = formImage.querySelector('.img-upload__cancel'); // кнопка закрытия формы
 const uploadButton = formImage.querySelector('.img-upload__submit'); // кнопка отправки данных
 
+const effectNoneInputRadio = document.querySelector('.effects__radio');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const pictures = document.querySelector('.pictures');
 /*
@@ -124,6 +125,7 @@ formImage.addEventListener('submit', (evt) => {
 
 // Закрытие окна
 function closeModalFormImg () {
+  effectNoneInputRadio.checked = true;
   inputImgUpload.value = ''; // очищаем поле выбора изображения
   inputTextHashtags.value = ''; // очищаем поле хэштега
   textDescription.value = ''; // очищаем поле описания
@@ -133,6 +135,8 @@ function closeModalFormImg () {
   imagePreview.style.removeProperty('filter'); // удаляем стиль наложения эффекта
   scaleInput.value = '100%'; // начальное значение в поле масштаба
   resetScale(); // устанавливаем масштаб по умолчанию
+
+  pristine.validate();
 
   formImgUpload.classList.add('hidden'); // скрываем форму
   body.classList.remove('modal-open'); // "разблокировываем" страницу

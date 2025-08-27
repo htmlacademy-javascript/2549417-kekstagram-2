@@ -15,8 +15,8 @@ const clearComments = (node) => {
 
 // Удаляем все элементы с указанным параметром
 const clearNodes = (node) => {
-  const removed = document.querySelectorAll(node); // находим все указанные элементы
-  removed.forEach((remove) => { // промегаемся по каждому из них
+  const removeNodes = document.querySelectorAll(node); // находим все указанные элементы
+  removeNodes.forEach((remove) => { // промегаемся по каждому из них
     remove.remove(); // удаляем
   });
 };
