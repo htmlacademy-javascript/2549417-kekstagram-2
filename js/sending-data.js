@@ -18,7 +18,7 @@ const uploadButton = formImage.querySelector('.img-upload__submit'); // кноп
 */
 
 // Закрываем окно сообщения по Esc
-const closeMessageEsc = (evt) => {
+const onCloseMessageEsc = (evt) => {
   if (isEscapeKey(evt)) { // проверяем нажатую клавишу
     successMessage.remove(); // удаляем сообщение об успешной отправке
     errorMessage.remove(); // удаляем сообщение об ошибке при отправке
@@ -28,15 +28,16 @@ const closeMessageEsc = (evt) => {
 };
 
 // Закрываем окно по клику мыши на свободном месте
-const closeMessageClick = (evt) => {
+const onCloseMessageClick = (evt) => {
   if (evt.target === successMessage) { // если открыто сообщение об успешной отправке
     successMessage.remove(); // удаляем сообщение об успешной отправке
   }
   if (evt.target === errorMessage) { // если открыто сообщение об ошибке
     errorMessage.remove(); // удаляем сообщение об успешной отправке
   }
-  body.removeEventListener('click', closeMessageClick); // удаляем обработчик клика по свободному месту
-  document.removeEventListener('keydown', closeMessageEsc); // удаляем обработчик закрытия окна по клавише ESC
+
+  body.removeEventListener('click', onCloseMessageClick); // удаляем обработчик клика по свободному месту
+  document.removeEventListener('keydown', onCloseMessageEsc); // удаляем обработчик закрытия окна по клавише ESC
   document.addEventListener('keydown', onDocumentKeydown); // возвращаем обработчик закрытия формы по ESC
 };
 
@@ -44,8 +45,8 @@ const closeMessageClick = (evt) => {
 // Ошибка отправки
 const addMessageError = () => {
   body.append(errorMessage); // добавляем сообщение перед закрытием body
-  body.addEventListener('click', closeMessageClick); // добавляем обработчик клика по свободному месту
-  document.addEventListener('keydown', closeMessageEsc); // добавляем обработчик закрытия по ESC
+  body.addEventListener('click', onCloseMessageClick); // добавляем обработчик клика по свободному месту
+  document.addEventListener('keydown', onCloseMessageEsc); // добавляем обработчик закрытия по ESC
   document.removeEventListener('keydown', onDocumentKeydown); // удаляем обработчик закрытия формы по ESC
 
   buttonErrorMessage.addEventListener('click', //обработчик кнопки
@@ -59,8 +60,8 @@ const addMessageError = () => {
 // Отправлено успешно
 const addMessageSuccess = () => {
   body.append(successMessage); // добавляем сообщение перед закрытием body
-  body.addEventListener('click', closeMessageClick); // добавляем обработчик клика по свободному месту
-  document.addEventListener('keydown', closeMessageEsc); // добавляем обработчик закрытия по ESC
+  body.addEventListener('click', onCloseMessageClick); // добавляем обработчик клика по свободному месту
+  document.addEventListener('keydown', onCloseMessageEsc); // добавляем обработчик закрытия по ESC
 
   buttonSuccessMessage.addEventListener('click', //обработчик кнопки
     () => {

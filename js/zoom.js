@@ -29,7 +29,7 @@ const getUpdateImageScale = () => {
 };
 
 // Функция для увеличения масштаба
-const applyScalePlus = () => {
+const onApplyScalePlus = () => {
   currentScale =
     currentScale >= MIN_CURRENT_SCALE && currentScale < MAX_CURRENT_SCALE // проверяем находимся ли мы в пределах диапазона
       ? Math.min(currentScale + SCALE_STEP, MAX_CURRENT_SCALE) // если да, то увеличиваем значение и контролируем выход из диапазона
@@ -39,7 +39,7 @@ const applyScalePlus = () => {
 };
 
 // Функция для уменьшения масштаба
-const applyScaleMinus = () => {
+const onApplyScaleMinus = () => {
   currentScale =
     currentScale > MIN_CURRENT_SCALE && currentScale <= MAX_CURRENT_SCALE // проверяем находимся ли мы в пределах диапазона
       ? Math.min(currentScale - SCALE_STEP, MAX_CURRENT_SCALE) // если да, то уменьшаем значение и контролируем выход из диапазона
@@ -49,14 +49,14 @@ const applyScaleMinus = () => {
 
 // Добавляем обработчики событий на кнопки масштаба
 const getZoomImgButton = () => {
-  zoomInBtn.addEventListener('click', applyScalePlus); // увеличиваем масштаб
-  zoomOutBtn.addEventListener('click', applyScaleMinus); // уменьшаем масштаб
+  zoomInBtn.addEventListener('click', onApplyScalePlus); // увеличиваем масштаб
+  zoomOutBtn.addEventListener('click', onApplyScaleMinus); // уменьшаем масштаб
 };
 
 // Удаляет обработчики событий на кнопках масштаба
 const removeEventZoomImgButton = () => {
-  zoomInBtn.removeEventListener('click', applyScalePlus); // увеличиваем масштаб
-  zoomOutBtn.removeEventListener('click', applyScaleMinus); // уменьшаем масштаб
+  zoomInBtn.removeEventListener('click', onApplyScalePlus); // увеличиваем масштаб
+  zoomOutBtn.removeEventListener('click', onApplyScaleMinus); // уменьшаем масштаб
 };
 
 export { currentScale, resetScale, removeEventZoomImgButton, getZoomImgButton };

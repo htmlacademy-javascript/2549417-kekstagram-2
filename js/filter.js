@@ -1,5 +1,5 @@
 import { arrayPhotoData, viewMiniatures} from './miniatures';
-import { clearNodes, throttle, debounce } from './utils.js';
+import { clearNodes, debounce } from './utils.js';
 import { TIMEOUT_REDRAW } from './settings.js';
 
 const defaultFilter = document.querySelector('#filter-default');
@@ -46,8 +46,7 @@ const applyFilter = (filterType) => {
       clearNodes('.picture'); // очищаем содержимое страницы
       break; // выходим
   }
-
-  debounce(viewMiniatures(filteredImages), TIMEOUT_REDRAW);
+  viewMiniatures(filteredImages);
 };
 
 // Инициализация фильтров
@@ -55,9 +54,9 @@ const setupFilters = () => {
   filter.classList.remove('img-filters--inactive'); // показываем блок фильтров
   defaultFilter.disabled = true; // деактивируем кнопку
 
-  defaultFilter.addEventListener('click', throttle(() => applyFilter('default'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "По умолчанию"
-  randomFilter.addEventListener('click', throttle(() => applyFilter('random'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "Случайные"
-  discussedFilter.addEventListener('click', throttle(() => applyFilter('discussed'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "Ожидаемые
+  defaultFilter.addEventListener('click', debounce(() => applyFilter('default'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "По умолчанию"
+  randomFilter.addEventListener('click', debounce(() => applyFilter('random'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "Случайные"
+  discussedFilter.addEventListener('click', debounce(() => applyFilter('discussed'), TIMEOUT_REDRAW)); // вешает обработчик фильтра "Ожидаемые
 };
 
 /*

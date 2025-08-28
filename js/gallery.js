@@ -78,7 +78,7 @@ const onLoadMoreComments = () => {
 */
 
 // Функция закрытия увеличенного изображения
-const getCloseFullImageForm = () => {
+const onCloseFullImageForm = () => {
   fullImageForm.classList.add('hidden'); // скрываем окно изображения
   body.classList.remove('modal-open'); // "размораживаем" основное окно
 
@@ -99,7 +99,7 @@ const getCloseFullImageForm = () => {
 function onDocumentKeydown (evt) {
   if (isEscapeKey(evt)) { // если нажата клавиша ESC
     evt.preventDefault(); // отменяем действие по умолчанию
-    getCloseFullImageForm(); // закрываем форму полноразмерного просмотра изображения
+    onCloseFullImageForm(); // закрываем форму полноразмерного просмотра изображения
   }
 }
 
@@ -149,7 +149,7 @@ const getOpenFullImageForm = (index) => {
   getLoadFullPhoto(arrayPhotoData[index]); // заполняем данными выбранного изображения
   getLoadCommentBatch(index); // загружаем первую порцию комментариев
 
-  fullImageFormClose.addEventListener('click', getCloseFullImageForm); // добавляем обработчик закрытия окна по кнопке
+  fullImageFormClose.addEventListener('click', onCloseFullImageForm); // добавляем обработчик закрытия окна по кнопке
   document.addEventListener('keydown', onDocumentKeydown); // добавляем обработчик закрытия окна по ESC
 };
 
@@ -177,7 +177,7 @@ const onDelegateThumbnailClick = (event) => {
       fullImageForm.classList.remove('hidden'); // показываем окно полноразмерного просмотра изображения
       body.classList.add('modal-open'); // "замораживаем" основное окно
 
-      fullImageFormClose.addEventListener('click', getCloseFullImageForm); // добавляем обработчик закрытия окна по кнопке
+      fullImageFormClose.addEventListener('click', onCloseFullImageForm); // добавляем обработчик закрытия окна по кнопке
       document.addEventListener('keydown', onDocumentKeydown); // добавляем обработчик закрытия окна по ESC
     } else {
       // если id найден

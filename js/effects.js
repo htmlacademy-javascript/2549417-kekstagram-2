@@ -68,7 +68,7 @@ const noneEffect = () => {
 };
 
 // Главная функция для применения выбранного эффекта
-const applySelectedEffect = () => {
+const onApplySelectedEffect = () => {
   let effectValue = document.activeElement.value; // получем значение активного элемента
   effectValue = effectValue !== 'none' ? effectValue.toUpperCase() : 'none'; // переводим название эффекта в верхний регистр, если это не "none"
 
@@ -99,12 +99,12 @@ const applySelectedEffect = () => {
 
 // Добавляем обработчики эффектов на кнопки
 const getEventEffects = () => {
-  effectRadioButtons.forEach((button) => button.addEventListener('change', applySelectedEffect));
+  effectRadioButtons.forEach((button) => button.addEventListener('change', onApplySelectedEffect));
 };
 
 // Удаляем обработчики с кнопок эффектов
 const removeEventEffects = () => {
-  effectRadioButtons.forEach((button) => button.removeEventListener('change', applySelectedEffect));
+  effectRadioButtons.forEach((button) => button.removeEventListener('change', onApplySelectedEffect));
 };
 
 export { removeEventEffects, getEventEffects };

@@ -108,11 +108,12 @@ const addPicture = () => {
 formImage.addEventListener('submit', (evt) => {
   evt.preventDefault(); // отмена действия по умолчанию
 
-  if (pristine.validate()) { // валидация пройдена
+  if (pristine.validate()) {
+    // валидация пройдена
     const formData = new FormData(evt.target); // формируем поля формы для отправки
 
     uploadButton.disabled = true; // деактивируем кнопку отправки формы
-    getUploadToServer(formData, addMessageSuccess, addMessageError, closeModalFormImg); // отправляем данные
+    getUploadToServer(formData, addMessageSuccess, addMessageError, onCloseModalFormImg); // отправляем данные
     addPicture(); // добавляем изображение на сайт
   }
 });
@@ -124,7 +125,7 @@ formImage.addEventListener('submit', (evt) => {
 */
 
 // Закрытие окна
-function closeModalFormImg () {
+function onCloseModalFormImg () {
   effectNoneInputRadio.checked = true;
   inputImgUpload.value = ''; // очищаем поле выбора изображения
   inputTextHashtags.value = ''; // очищаем поле хэштега
@@ -141,7 +142,7 @@ function closeModalFormImg () {
   formImgUpload.classList.add('hidden'); // скрываем форму
   body.classList.remove('modal-open'); // "разблокировываем" страницу
 
-  closeImgUpload.removeEventListener('click', closeModalFormImg); // удаялем обработчик закрытия окна
+  closeImgUpload.removeEventListener('click', onCloseModalFormImg); // удаялем обработчик закрытия окна
   document.removeEventListener('keydown', onDocumentKeydown); // удаляем обработчик закрытия окна по Esc
   removeEventZoomImgButton(); // удаляем обработчик кнопок масштаба
   removeEventEffects(); // удаляем обработчики кнопок эффектов
@@ -155,8 +156,7 @@ function onDocumentKeydown (evt) {
 
   // Если ни одно из полей не активно и нажата клавиша Esc, закрываем форму загрузки изображения
   if (!(hashTagFocus || textDescriptionFocus) && isEscapeKey(evt)) {
-    // evt.preventDefault(); // отменяем действие по умолчанию
-    closeModalFormImg(); // закрываем форму
+    onCloseModalFormImg(); // закрываем форму
   }
 }
 
@@ -164,7 +164,7 @@ function onDocumentKeydown (evt) {
 const openModalFormImg = () => {
   formImgUpload.classList.remove('hidden'); // показываем форму с изображением
   body.classList.add('modal-open'); // блокируем страницу
-  closeImgUpload.addEventListener('click', closeModalFormImg); // добавялем обработчик закрытия формы
+  closeImgUpload.addEventListener('click', onCloseModalFormImg); // добавялем обработчик закрытия формы
 
   slider.setAttribute('disabled', true); // блокируем слайдер
   sliderContainer.classList.add('hidden'); // скрываем слайдер вместе с контейнером
