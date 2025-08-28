@@ -46,7 +46,6 @@ const applyFilter = (filterType) => {
       clearNodes('.picture'); // очищаем содержимое страницы
       break; // выходим
   }
-
   viewMiniatures(filteredImages);
 };
 

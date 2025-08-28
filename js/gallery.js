@@ -138,7 +138,6 @@ const getLoadFullPhotoSelfAdded = (url, filter) => {
   commentsLoaderButton.addEventListener('click', onLoadMoreComments); // добавляем обработчик следующих комментариев
 };
 
-
 // Основная функция для открытия увеличенного изображения
 const getOpenFullImageForm = (index) => {
   fullImageForm.classList.remove('hidden'); // показываем окно полноразмерного просмотра изображения
@@ -193,4 +192,3 @@ const initDelegatedEvents = () => {
 };
 
 initDelegatedEvents(); // запускаем
-

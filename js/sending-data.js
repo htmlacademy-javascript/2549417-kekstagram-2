@@ -35,6 +35,7 @@ const onCloseMessageClick = (evt) => {
   if (evt.target === errorMessage) { // если открыто сообщение об ошибке
     errorMessage.remove(); // удаляем сообщение об успешной отправке
   }
+
   body.removeEventListener('click', onCloseMessageClick); // удаляем обработчик клика по свободному месту
   document.removeEventListener('keydown', onCloseMessageEsc); // удаляем обработчик закрытия окна по клавише ESC
   document.addEventListener('keydown', onDocumentKeydown); // возвращаем обработчик закрытия формы по ESC
